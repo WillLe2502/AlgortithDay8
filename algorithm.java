@@ -7,12 +7,12 @@ import java.util.List;
 public class algorithm {
 	public static void main (String args[]) {
 		
-		// Square Root O(n)
+		// Square Root O(n*n)
 		
 		System.out.println(squareRoot(0.25));
 		
 		// Roman Number O(n)
-		int romanNumber = RomanNumberToInt("III");
+		int romanNumber = RomanNumberToInt("XIII");
 		System.out.println(romanNumber);
 		System.out.println(isRomanNumber(romanNumber));
 		
@@ -42,59 +42,52 @@ public class algorithm {
 	
 	private static int RomanNumberToInt(String romanInput) {
 		int total = 0;
-		for (int i = 0; i < romanInput.length(); i++) {
-			if (romanInput.charAt(i) == 'I') {
-				if (i + 1 < romanInput.length()) {
-					if (romanInput.charAt(i + 1) == 'V' || romanInput.charAt(i + 1) == 'X') {
-						total = total - 1;
-					} else {
-						total = total + 1;
-					}
-				} else {
-					total = total + 1;
-				}
-				
-			} else if (romanInput.charAt(i) == 'V') {
-				total += 5;
-				
-			} else if (romanInput.charAt(i) == 'X') {
-				if (i + 1 < romanInput.length()) {
-					if (romanInput.charAt(i + 1) == 'L' || romanInput.charAt(i + 1) == 'C') {
-						total = total - 10;
-					} else {
-						total = total + 10;
-					}
-				} else {
-					total = total + 10;
-				}
-				
-			} else if (romanInput.charAt(i) == 'L') {
-				total += 50;
-				
-			} else if (romanInput.charAt(i) == 'C') {
-				if (i + 1 < romanInput.length()) {
-					if (romanInput.charAt(i + 1) == 'D' || romanInput.charAt(i + 1) == 'M') {
-						total = total - 100;
-					} else {
-						total = total + 100;
-					}
-				} else {
-					total = total + 100;
-				}
-				
-			} else if (romanInput.charAt(i) == 'D' || romanInput.charAt(i) == 'd') {
-				total += 500;
-				
-			} else if (romanInput.charAt(i) == 'M' || romanInput.charAt(i) == 'm') {
-				total += 1000;
-				
-			} else {
-				return 0;
+		int currentChar = 0;
+		int nextChar = 0;
+		
+		for(int i = 0; i < romanInput.length(); i++) {
+			currentChar = romanToIntConverter(romanInput.charAt(i));
+			
+			if (currentChar == -1) {
+				return -1;
 			}
-
-			//System.out.println(total);
+			
+			if (i + 1 < romanInput.length()) {
+				nextChar = romanToIntConverter(romanInput.charAt(i+1));
+				if (currentChar < nextChar) {
+					total = total - currentChar;
+				} else {
+					total = total + currentChar;
+				}
+			} else {
+				total = total + currentChar;
+			}
+			
+			//System.out.println(currentChar);
 		}
+		
 		return total;
+	}
+	
+	private static int romanToIntConverter(char romanInput) {
+		switch (romanInput) {
+		case 'I':
+			return 1;
+		case 'V':
+			return 5;
+		case 'X':
+			return 10;
+		case 'L':
+			return 50;
+		case 'C':
+			return 100;
+		case 'D':
+			return 500;
+		case 'M':
+			return 1000;
+		default:
+			return -1;
+		}
 	}
 	
 	private static boolean isRomanNumber(int romanNumberOutput) {
